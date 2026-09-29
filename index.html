@@ -2,111 +2,80 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ClaimGuard - Prototype Validasi Klaim</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ClaimGuard - Smart Claim Validation</title>
 
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f4f6fa;color:#172033}
-header{
-height:64px;background:white;border-bottom:1px solid #ddd;
-display:flex;align-items:center;justify-content:space-between;padding:0 30px;
-position:sticky;top:0;z-index:10
-}
-.logo{font-size:20px;font-weight:bold;color:#1746a2}
-.badge{background:#fff0c2;color:#925c00;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:bold}
-
+header{height:64px;background:#fff;border-bottom:1px solid #ddd;display:flex;align-items:center;justify-content:space-between;padding:0 30px;position:sticky;top:0;z-index:10}
+.logo{font-size:20px;font-weight:700;color:#1746a2}
+.proto{background:#fff0c2;color:#925c00;padding:8px 14px;border-radius:20px;font-size:11px;font-weight:bold}
 .layout{display:flex}
-.sidebar{
-width:230px;background:#122451;min-height:calc(100vh - 64px);
-padding:24px 15px;color:white
-}
-.side-title{font-size:11px;color:#8fb5ff;margin:8px 12px 18px}
+.sidebar{width:230px;background:#122451;min-height:calc(100vh - 64px);padding:24px 15px;color:white}
+.side-title{font-size:10px;color:#8fb5ff;margin:8px 12px 18px}
 .menu{padding:13px;border-radius:8px;margin-bottom:6px;color:#d9e5ff}
-.menu.active{background:#2764d8;color:white}
-
+.menu.active{background:#2764d8}
 main{flex:1;padding:32px;max-width:1300px}
 h1{margin:0 0 7px;font-size:27px}
 .subtitle{color:#687386;margin-bottom:25px}
 
 .steps{display:flex;gap:8px;margin-bottom:25px}
-.step{
-flex:1;background:white;border:1px solid #dfe3ea;
-border-radius:10px;padding:13px;font-size:12px
-}
+.step{flex:1;background:#fff;border:1px solid #dfe3ea;border-radius:10px;padding:13px;font-size:12px}
 .step b{display:block;color:#2764d8;margin-bottom:5px}
 .step.active{border:2px solid #2764d8;background:#edf4ff}
 
-.card{
-background:white;border:1px solid #dfe3ea;border-radius:12px;
-padding:24px;margin-bottom:20px
-}
+.card{background:#fff;border:1px solid #dfe3ea;border-radius:12px;padding:24px;margin-bottom:20px}
 .card h2{margin-top:0;font-size:19px}
-
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 label{font-size:12px;font-weight:bold;display:block;margin-bottom:6px}
-input,select{
-width:100%;padding:11px;border:1px solid #ccd2dc;
-border-radius:7px;background:white
-}
-
-button{
-border:0;border-radius:7px;padding:11px 18px;
-font-weight:bold;cursor:pointer
-}
+input,select{width:100%;padding:11px;border:1px solid #ccd2dc;border-radius:7px;background:#fff}
+button{border:0;border-radius:7px;padding:11px 18px;font-weight:bold;cursor:pointer}
 .primary{background:#2764d8;color:white}
 .secondary{background:#eef1f5;color:#28354a}
-.danger{background:#fff1f1;color:#b42318;border:1px solid #ffc9c9}
-
 .actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}
-
 .hidden{display:none}
 
-.panel-grid{
-display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:15px
-}
-.panel{
-border:1px solid #d9dee7;border-radius:10px;padding:16px;
-cursor:pointer;background:#fff;transition:.2s
-}
-.panel:hover{border-color:#2764d8}
+.alert{padding:15px;border-radius:8px;margin:15px 0;font-size:13px}
+.blue{background:#eef5ff;border-left:4px solid #2764d8}
+.yellow{background:#fff8df;border-left:4px solid #e5a000}
+.red{background:#fff0f0;border-left:4px solid #dc2626}
+.green{background:#ecfdf3;border-left:4px solid #16a34a}
+
+.panel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.panel{border:1px solid #d9dee7;border-radius:10px;padding:16px;cursor:pointer;background:#fff}
 .panel.selected{border:2px solid #dc2626;background:#fff3f3}
 .panel-title{font-weight:bold;margin-bottom:5px}
 .small{font-size:12px;color:#6b7280}
 
-.alert{
-padding:15px;border-radius:8px;margin:15px 0;font-size:13px
-}
-.alert.blue{background:#eef5ff;border-left:4px solid #2764d8}
-.alert.yellow{background:#fff8df;border-left:4px solid #e5a000}
-.alert.red{background:#fff0f0;border-left:4px solid #dc2626}
-.alert.green{background:#ecfdf3;border-left:4px solid #16a34a}
+.system-label{display:inline-block;padding:5px 9px;border-radius:15px;font-size:10px;font-weight:bold;margin-bottom:10px}
+.existing{background:#e8eef8;color:#37517e}
+.proposed{background:#e9f8ef;color:#137a3d}
 
-.part{
-display:flex;align-items:center;justify-content:space-between;
-border:1px solid #e0e4eb;padding:14px;border-radius:9px;margin:9px 0;
-gap:15px
-}
+.validation-block{border:1px solid #dfe3ea;border-radius:11px;margin:15px 0;overflow:hidden}
+.validation-head{padding:14px 16px;background:#f7f8fa;border-bottom:1px solid #e1e4e9;font-weight:bold}
+.validation-body{padding:16px}
+
+.part{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:14px;border:1px solid #e1e5eb;border-radius:9px;margin:9px 0}
 .part-info{flex:1}
 .part-name{font-weight:bold}
-.tag{
-display:inline-block;font-size:10px;padding:4px 7px;border-radius:12px;
-background:#edf2ff;color:#244b9b;margin-top:5px
-}
-.part select{width:150px}
+.tag{display:inline-block;font-size:10px;padding:4px 7px;border-radius:12px;background:#edf2ff;color:#244b9b;margin-top:5px}
+.part select{width:160px}
 
-.summary{
-display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:15px 0
-}
+.counters{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.counter{background:#fff;border:1px solid #dfe3ea;border-radius:10px;padding:15px;text-align:center}
+.counter strong{display:block;font-size:23px}
+.counter span{font-size:11px;color:#6b7280}
+
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .stat{padding:18px;border:1px solid #ddd;border-radius:10px;text-align:center}
-.stat strong{display:block;font-size:25px;margin-bottom:5px}
+.stat strong{display:block;font-size:25px}
 
 @media(max-width:850px){
 .sidebar{display:none}
 main{padding:20px}
-.steps{flex-direction:column}
-.grid,.panel-grid,.summary{grid-template-columns:1fr}
-.part{align-items:flex-start;flex-direction:column}
+.steps,.grid,.panel-grid,.counters,.summary{grid-template-columns:1fr;display:grid}
+.part{flex-direction:column;align-items:flex-start}
 .part select{width:100%}
 }
 </style>
@@ -116,36 +85,38 @@ main{padding:20px}
 
 <header>
 <div class="logo">CLAIMGUARD</div>
-<div class="badge">PROTOTYPE SYSTEM</div>
+<div class="proto">PROTOTYPE • PROPOSED SYSTEM</div>
 </header>
 
 <div class="layout">
 
 <div class="sidebar">
 <div class="side-title">CLAIM MANAGEMENT</div>
-<div class="menu active">▣ Survey Klaim</div>
+<div class="menu active">▣ Smart Survey</div>
 <div class="menu">▤ Data Klaim</div>
-<div class="menu">✓ Validasi Sparepart</div>
-<div class="menu">◎ Hasil Survey</div>
+<div class="menu">✓ Panel Validation</div>
+<div class="menu">⚠ Smart Part Check</div>
+<div class="menu">◎ Survey Result</div>
 </div>
 
 <main>
 
-<h1>Smart Claim Survey</h1>
+<h1>Smart Claim Validation</h1>
 <div class="subtitle">
-Prototype validasi panel dan sparepart untuk mengurangi penambahan part setelah SPK.
+Prototype pencegahan penambahan sparepart setelah SPK melalui validasi survey awal.
 </div>
 
 <div class="steps">
 <div class="step active" id="s1"><b>01</b>Data Klaim</div>
 <div class="step" id="s2"><b>02</b>Kerusakan</div>
-<div class="step" id="s3"><b>03</b>Validasi Panel</div>
-<div class="step" id="s4"><b>04</b>Sparepart</div>
+<div class="step" id="s3"><b>03</b>Panel</div>
+<div class="step" id="s4"><b>04</b>Smart Check</div>
 <div class="step" id="s5"><b>05</b>Review</div>
 </div>
 
-<!-- STEP 1 -->
 <section id="page1" class="card">
+
+<span class="system-label existing">EXISTING SYSTEM</span>
 <h2>Data Klaim & Kendaraan</h2>
 
 <div class="grid">
@@ -175,7 +146,7 @@ Prototype validasi panel dan sparepart untuk mengurangi penambahan part setelah 
 </div>
 
 <div class="alert blue">
-ℹ️ Data yang digunakan pada prototype merupakan data dummy dan tidak terhubung dengan database perusahaan.
+ℹ Data prototype menggunakan data dummy dan tidak terhubung ke database perusahaan.
 </div>
 
 <div class="actions">
@@ -183,14 +154,12 @@ Prototype validasi panel dan sparepart untuk mengurangi penambahan part setelah 
 </div>
 </section>
 
-<!-- STEP 2 -->
 <section id="page2" class="card hidden">
 
+<span class="system-label existing">EXISTING SYSTEM</span>
 <h2>Input Kerusakan Kendaraan</h2>
 
-<p class="small">
-Pilih panel yang mengalami kerusakan berdasarkan hasil survey kendaraan.
-</p>
+<p class="small">Pilih panel berdasarkan kerusakan yang ditemukan saat survey.</p>
 
 <div class="panel-grid">
 
@@ -230,265 +199,588 @@ Pilih panel yang mengalami kerusakan berdasarkan hasil survey kendaraan.
 
 <div class="actions">
 <button class="secondary" onclick="go(1)">← Kembali</button>
-<button class="primary" onclick="panelValidation()">Validasi Panel →</button>
+<button class="primary" onclick="validatePanel()">Validasi Panel →</button>
 </div>
-
 </section>
 
-<!-- STEP 3 -->
 <section id="page3" class="card hidden">
 
-<h2>Validasi Panel Utama</h2>
+<span class="system-label existing">EXISTING SYSTEM</span>
+<h2>Panel & Support Validation</h2>
 
 <div class="alert blue">
-🔎 Sistem melakukan pengecekan panel berdasarkan kendaraan dan nomor rangka.
+🔎 Sistem melakukan validasi panel berdasarkan nomor rangka kendaraan.
 </div>
 
-<div id="panelResult"></div>
+<div id="mainPanel"></div>
+
+<div class="validation-block">
+<div class="validation-head">Existing Auto Support</div>
+<div class="validation-body">
+<div class="alert green">
+✓ Panel support yang sudah terdaftar pada sistem akan ditambahkan secara otomatis.
+</div>
+<div id="existingSupport"></div>
+</div>
+</div>
 
 <div class="alert yellow">
-<strong>Smart Validation</strong><br><br>
-Sistem akan menampilkan komponen pendukung yang berpotensi ikut mengalami kerusakan agar tidak terlewat pada survey awal.
+<strong>Selanjutnya: Smart Part Check</strong><br><br>
+Fitur usulan akan memeriksa part kasat mata serta karakter material/finishing yang berpotensi terlewat saat survey.
 </div>
 
 <div class="actions">
 <button class="secondary" onclick="go(2)">← Kembali</button>
-<button class="primary" onclick="loadParts()">Periksa Part Terkait →</button>
+<button class="primary" onclick="openSmartCheck()">Smart Part Check →</button>
 </div>
-
 </section>
 
-<!-- STEP 4 -->
 <section id="page4" class="card hidden">
 
-<h2>Validasi Sparepart Terkait</h2>
+<span class="system-label proposed">PROPOSED FEATURE</span>
+<h2>Smart Part Check</h2>
 
-<div class="alert red">
-⚠️ <strong>Potensi part terlewat terdeteksi.</strong><br>
-Periksa seluruh komponen terkait sebelum survey dapat diselesaikan.
+<div class="counters">
+<div class="counter">
+<strong id="checkCount">0</strong>
+<span>PEMERIKSAAN</span>
+</div>
+<div class="counter">
+<strong id="warningCount">0</strong>
+<span>POTENSI WARNING</span>
+</div>
+<div class="counter">
+<strong id="pendingCount">0</strong>
+<span>BELUM VALID</span>
+</div>
 </div>
 
-<div id="parts"></div>
+<div class="validation-block">
+<div class="validation-head">👁 Smart Visual Check — Part Kasat Mata</div>
+<div class="validation-body">
 
-<div id="partWarning" class="alert yellow">
-Semua part terkait wajib diberikan status.
+<div class="alert yellow">
+Sistem meminta surveyor memeriksa komponen yang secara visual berkaitan dengan panel utama.
+</div>
+
+<div id="visualParts"></div>
+
+</div>
+</div>
+
+<div class="validation-block">
+<div class="validation-head">◆ Material / Finishing Check</div>
+<div class="validation-body">
+
+<div class="alert red">
+<strong>Special Material Detection</strong><br><br>
+Part dengan finishing chrome, kulit jeruk, atau karakter tertentu memerlukan perhatian khusus sebelum keputusan repair/ganti.
+</div>
+
+<div id="materialParts"></div>
+
+</div>
+</div>
+
+<div id="validationMessage" class="alert yellow">
+Lengkapi seluruh pemeriksaan sebelum melanjutkan survey.
 </div>
 
 <div class="actions">
 <button class="secondary" onclick="go(3)">← Kembali</button>
-<button class="primary" onclick="validateParts()">Validasi Survey →</button>
+<button class="primary" onclick="finalValidation()">Final Validation →</button>
 </div>
-
 </section>
 
-<!-- STEP 5 -->
 <section id="page5" class="card hidden">
 
-<h2>Review Hasil Survey</h2>
+<span class="system-label proposed">PROPOSED FEATURE</span>
+<h2>Review Hasil Smart Validation</h2>
 
 <div class="summary">
-
-<div class="stat">
-<strong id="totalPanel">1</strong>
-Panel Rusak
-</div>
-
-<div class="stat">
-<strong id="totalPart">0</strong>
-Part Diperiksa
-</div>
-
-<div class="stat">
-<strong id="missingPart">0</strong>
-Part Terlewat
-</div>
-
+<div class="stat"><strong>1</strong>Panel Utama</div>
+<div class="stat"><strong id="reviewChecked">0</strong>Part Diperiksa</div>
+<div class="stat"><strong>0</strong>Part Terlewat</div>
 </div>
 
 <div class="alert green">
-✅ <strong>VALIDASI SELESAI</strong><br><br>
-Seluruh komponen terkait telah diperiksa. Tidak ditemukan part yang belum divalidasi.
+<strong>✓ SURVEY VALID</strong><br><br>
+Seluruh part kasat mata dan material khusus telah diperiksa sebelum proses SPK.
 </div>
 
-<div id="review"></div>
+<div id="reviewResult"></div>
 
 <div class="actions">
 <button class="secondary" onclick="go(4)">← Kembali</button>
-<button class="primary" onclick="finishSurvey()">✓ Finalisasi Survey</button>
+<button class="primary" onclick="finish()">✓ Finalisasi Survey</button>
 </div>
 
 </section>
 
-</main>
-</div>
+  <script>
 
-<script>
-
-let selectedPanel="";
-let selectedElement=null;
+let selectedPanel = "";
 
 function go(n){
+  document.querySelectorAll("section").forEach(x => x.classList.add("hidden"));
+  document.getElementById("page"+n).classList.remove("hidden");
 
-document.querySelectorAll("section").forEach(x=>x.classList.add("hidden"));
-document.getElementById("page"+n).classList.remove("hidden");
+  document.querySelectorAll(".step").forEach(x => x.classList.remove("active"));
+  document.getElementById("s"+n).classList.add("active");
 
-document.querySelectorAll(".step").forEach(x=>x.classList.remove("active"));
-document.getElementById("s"+n).classList.add("active");
-
-window.scrollTo(0,0);
+  window.scrollTo(0,0);
 }
 
 function selectPanel(el,name){
 
-document.querySelectorAll(".panel").forEach(x=>x.classList.remove("selected"));
+  document.querySelectorAll(".panel").forEach(x => x.classList.remove("selected"));
 
-el.classList.add("selected");
-selectedPanel=name;
-selectedElement=el;
+  el.classList.add("selected");
+  selectedPanel = name;
 
-let info=document.getElementById("selectedInfo");
-info.classList.remove("hidden");
+  const info = document.getElementById("selectedInfo");
 
-info.innerHTML=
-"🔴 <strong>Panel dipilih:</strong> "+name+
-"<br><br>Sistem akan memeriksa part pendukung yang berkaitan dengan panel ini.";
+  info.classList.remove("hidden");
+
+  info.innerHTML =
+  "🔴 <strong>Panel dipilih:</strong> " + name +
+  "<br><br>Sistem akan melakukan validasi panel dan memeriksa komponen terkait.";
 }
 
-function panelValidation(){
 
-if(selectedPanel===""){
-alert("Pilih panel yang mengalami kerusakan terlebih dahulu.");
-return;
+/* ======================================
+   DATABASE PANEL
+====================================== */
+
+const claimDatabase = {
+
+"Bumper Belakang": {
+
+  support:[
+    ["Bracket Bumper Belakang","AUTO SUPPORT"],
+    ["Retainer Bumper Belakang","AUTO SUPPORT"]
+  ],
+
+  visual:[
+    ["Reflector Bumper","Part Kasat Mata"],
+    ["Spoiler / Under Garnish","Part Kasat Mata"]
+  ],
+
+  material:[
+    ["Moulding Bumper Belakang","Kulit Jeruk"],
+    ["Garnish Bumper","Chrome / Special Finishing"]
+  ]
+},
+
+"Bumper Depan": {
+
+  support:[
+    ["Bracket Bumper Depan","AUTO SUPPORT"],
+    ["Retainer Bumper Depan","AUTO SUPPORT"]
+  ],
+
+  visual:[
+    ["Grille Depan","Part Kasat Mata"],
+    ["Foglamp Garnish","Part Kasat Mata"]
+  ],
+
+  material:[
+    ["Moulding Bumper Depan","Chrome / Special Finishing"],
+    ["Lower Garnish","Kulit Jeruk"]
+  ]
+},
+
+"Fender Depan": {
+
+  support:[
+    ["Fender Liner","AUTO SUPPORT"]
+  ],
+
+  visual:[
+    ["Inner Fender","Part Kasat Mata"]
+  ],
+
+  material:[
+    ["Moulding Fender","Special Finishing"]
+  ]
+},
+
+"Pintu": {
+
+  support:[
+    ["Door Weatherstrip","AUTO SUPPORT"]
+  ],
+
+  visual:[
+    ["Handle Pintu","Part Kasat Mata"],
+    ["List Pintu","Part Kasat Mata"]
+  ],
+
+  material:[
+    ["Moulding Pintu","Chrome / Special Finishing"]
+  ]
+},
+
+"Bagasi": {
+
+  support:[
+    ["Weatherstrip Bagasi","AUTO SUPPORT"]
+  ],
+
+  visual:[
+    ["Emblem","Part Kasat Mata"]
+  ],
+
+  material:[
+    ["Garnish Bagasi","Chrome / Special Finishing"]
+  ]
+},
+
+"Spion": {
+
+  support:[
+    ["Bracket Spion","AUTO SUPPORT"]
+  ],
+
+  visual:[
+    ["Lampu Sein Spion","Part Kasat Mata"],
+    ["Mirror Glass","Part Kasat Mata"]
+  ],
+
+  material:[
+    ["Cover Spion","Painted / Special Finishing"]
+  ]
 }
-
-document.getElementById("panelResult").innerHTML=
-'<div class="part">'+
-'<div class="part-info">'+
-'<div class="part-name">'+selectedPanel+'</div>'+
-'<span class="tag">PANEL UTAMA</span>'+
-'</div>'+
-'<strong style="color:#16a34a">✓ Sesuai Kendaraan</strong>'+
-'</div>';
-
-go(3);
-}
-
-const partDatabase={
-
-"Bumper Belakang":[
-["Moulding Bumper Belakang","Finishing / kulit jeruk"],
-["Reflector Bumper","Part pendukung"],
-["Retainer Bumper","Part pendukung"],
-["Spoiler / Under Garnish","Periksa material / finishing"]
-],
-
-"Bumper Depan":[
-["Grille Depan","Part terkait"],
-["Moulding Bumper","Chrome / finishing"],
-["Bracket Bumper","Part pendukung"],
-["Foglamp Garnish","Part terkait"]
-],
-
-"Fender Depan":[
-["Inner Fender","Part pendukung"],
-["Fender Liner","Part pendukung"],
-["Moulding Fender","Periksa finishing"]
-],
-
-"Pintu":[
-["Moulding Pintu","Periksa finishing"],
-["Handle Pintu","Chrome / painted"],
-["List Pintu","Part pendukung"]
-],
-
-"Bagasi":[
-["Garnish Bagasi","Chrome / finishing"],
-["Emblem","Part pendukung"],
-["Weatherstrip","Part pendukung"]
-],
-
-"Spion":[
-["Cover Spion","Painted"],
-["Lampu Sein Spion","Part terkait"],
-["Mirror Glass","Part terkait"]
-]
 
 };
 
-function loadParts(){
 
-let list=partDatabase[selectedPanel] || [];
-let html="";
+/* ======================================
+   VALIDASI PANEL
+====================================== */
 
-list.forEach((p,i)=>{
+function validatePanel(){
 
-html+=`
-<div class="part">
-<div class="part-info">
-<div class="part-name">${p[0]}</div>
-<span class="tag">${p[1]}</span>
-</div>
+  if(selectedPanel === ""){
+    alert("Pilih panel yang mengalami kerusakan terlebih dahulu.");
+    return;
+  }
 
-<select class="partStatus" data-name="${p[0]}">
-<option value="">-- Pilih Status --</option>
-<option value="Tidak Rusak">Tidak Rusak</option>
-<option value="Repair">Repair</option>
-<option value="Ganti">Ganti</option>
-</select>
-</div>
-`;
+  const data = claimDatabase[selectedPanel];
 
-});
+  document.getElementById("mainPanel").innerHTML = `
+    <div class="part">
+      <div class="part-info">
+        <div class="part-name">${selectedPanel}</div>
+        <span class="tag">PANEL UTAMA</span>
+      </div>
 
-document.getElementById("parts").innerHTML=html;
-go(4);
+      <strong style="color:#16a34a">
+        ✓ Sesuai Nomor Rangka
+      </strong>
+    </div>
+  `;
+
+  let supportHTML = "";
+
+  data.support.forEach(part => {
+
+    supportHTML += `
+      <div class="part">
+
+        <div class="part-info">
+          <div class="part-name">${part[0]}</div>
+          <span class="tag">${part[1]}</span>
+        </div>
+
+        <strong style="color:#16a34a">
+          + Otomatis Ditambahkan
+        </strong>
+
+      </div>
+    `;
+
+  });
+
+  document.getElementById("existingSupport").innerHTML = supportHTML;
+
+  go(3);
 }
 
-function validateParts(){
 
-let selects=document.querySelectorAll(".partStatus");
-let incomplete=false;
+/* ======================================
+   SMART PART CHECK
+====================================== */
 
-selects.forEach(s=>{
-if(s.value==="") incomplete=true;
-});
+function openSmartCheck(){
 
-if(incomplete){
+  const data = claimDatabase[selectedPanel];
 
-document.getElementById("partWarning").className="alert red";
-document.getElementById("partWarning").innerHTML=
-"⚠️ <strong>Survey belum dapat dilanjutkan.</strong><br>Ada part terkait yang belum diperiksa.";
+  let visualHTML = "";
+  let materialHTML = "";
 
-return;
+  data.visual.forEach(part => {
+
+    visualHTML += createCheckPart(
+      part[0],
+      part[1],
+      "visual"
+    );
+
+  });
+
+  data.material.forEach(part => {
+
+    materialHTML += createCheckPart(
+      part[0],
+      part[1],
+      "material"
+    );
+
+  });
+
+  document.getElementById("visualParts").innerHTML = visualHTML;
+  document.getElementById("materialParts").innerHTML = materialHTML;
+
+  updateCounters();
+
+  go(4);
 }
 
-document.getElementById("totalPart").innerText=selects.length;
-document.getElementById("missingPart").innerText="0";
 
-let review="<div class='card'><strong>Panel Utama:</strong> "+selectedPanel+"<br><br>";
+function createCheckPart(name,type,category){
 
-selects.forEach(s=>{
-review+="<strong>"+s.dataset.name+"</strong> — "+s.value+"<br><br>";
-});
+  return `
+  <div class="part">
 
-review+="</div>";
+    <div class="part-info">
 
-document.getElementById("review").innerHTML=review;
+      <div class="part-name">
+        ${name}
+      </div>
 
-go(5);
+      <span class="tag">
+        ${type}
+      </span>
+
+      ${
+        category === "material"
+        ?
+        '<div class="small" style="margin-top:7px;color:#b42318">⚠ Periksa kemungkinan part tidak dapat direpair.</div>'
+        :
+        '<div class="small" style="margin-top:7px">👁 Wajib dilakukan pengecekan visual.</div>'
+      }
+
+    </div>
+
+    <select
+      class="smartStatus"
+      data-name="${name}"
+      data-category="${category}"
+      onchange="updateCounters()"
+    >
+
+      <option value="">
+        -- Pilih Hasil Pemeriksaan --
+      </option>
+
+      <option value="Tidak Rusak">
+        Tidak Rusak
+      </option>
+
+      <option value="Repair">
+        Repair
+      </option>
+
+      <option value="Ganti">
+        Ganti
+      </option>
+
+    </select>
+
+  </div>
+  `;
 }
 
-function finishSurvey(){
 
-alert(
-"VALIDASI SURVEY BERHASIL\n\n"+
-"Seluruh panel dan sparepart terkait telah diperiksa.\n\n"+
-"Prototype: Data siap dilanjutkan ke proses SPK."
-);
+/* ======================================
+   COUNTER
+====================================== */
+
+function updateCounters(){
+
+  const checks = document.querySelectorAll(".smartStatus");
+
+  let pending = 0;
+  let warnings = 0;
+
+  checks.forEach(item => {
+
+    if(item.value === ""){
+      pending++;
+    }
+
+    if(
+      item.dataset.category === "material" &&
+      item.value === "Repair"
+    ){
+      warnings++;
+    }
+
+  });
+
+  document.getElementById("checkCount").innerText = checks.length;
+  document.getElementById("pendingCount").innerText = pending;
+  document.getElementById("warningCount").innerText = warnings;
+
+}
+
+
+/* ======================================
+   FINAL VALIDATION
+====================================== */
+
+function finalValidation(){
+
+  const checks = document.querySelectorAll(".smartStatus");
+
+  let pending = [];
+  let materialWarning = [];
+
+  checks.forEach(item => {
+
+    if(item.value === ""){
+      pending.push(item.dataset.name);
+    }
+
+    if(
+      item.dataset.category === "material" &&
+      item.value === "Repair"
+    ){
+      materialWarning.push(item.dataset.name);
+    }
+
+  });
+
+
+  /* PART BELUM DIPERIKSA */
+
+  if(pending.length > 0){
+
+    const box = document.getElementById("validationMessage");
+
+    box.className = "alert red";
+
+    box.innerHTML =
+    "⚠ <strong>SURVEY BELUM DAPAT DILANJUTKAN</strong>" +
+    "<br><br>" +
+    pending.length +
+    " part belum diberikan hasil pemeriksaan:" +
+    "<br><br>• " +
+    pending.join("<br>• ");
+
+    updateCounters();
+
+    return;
+  }
+
+
+  /* MATERIAL KHUSUS DIPILIH REPAIR */
+
+  if(materialWarning.length > 0){
+
+    const box = document.getElementById("validationMessage");
+
+    box.className = "alert red";
+
+    box.innerHTML =
+    "⚠ <strong>MATERIAL / FINISHING WARNING</strong>" +
+    "<br><br>" +
+    "Part berikut memiliki material atau finishing khusus namun dipilih <strong>Repair</strong>:" +
+    "<br><br>• " +
+    materialWarning.join("<br>• ") +
+    "<br><br>" +
+    "Pastikan metode repair memang memungkinkan. Jika tidak, ubah keputusan menjadi <strong>Ganti</strong>.";
+
+    updateCounters();
+
+    return;
+  }
+
+
+  /* VALID */
+
+  let reviewHTML = `
+  <div class="validation-block">
+
+    <div class="validation-head">
+      Hasil Pemeriksaan
+    </div>
+
+    <div class="validation-body">
+
+      <strong>Panel Utama</strong><br>
+      ${selectedPanel}
+
+      <br><br>
+
+      <strong>Smart Part Check</strong>
+
+      <br><br>
+  `;
+
+  checks.forEach(item => {
+
+    reviewHTML +=
+    "✓ <strong>" +
+    item.dataset.name +
+    "</strong> — " +
+    item.value +
+    "<br><br>";
+
+  });
+
+  reviewHTML += `
+    </div>
+  </div>
+  `;
+
+  document.getElementById("reviewResult").innerHTML = reviewHTML;
+
+  document.getElementById("reviewChecked").innerText = checks.length;
+
+  document.getElementById("validationMessage").className = "alert green";
+
+  document.getElementById("validationMessage").innerHTML =
+  "✓ <strong>VALIDASI LENGKAP</strong><br>Seluruh part terkait telah diperiksa.";
+
+  updateCounters();
+
+  go(5);
+}
+
+
+/* ======================================
+   FINALISASI
+====================================== */
+
+function finish(){
+
+  alert(
+    "SURVEY BERHASIL DIVALIDASI\n\n" +
+    "Panel utama telah diverifikasi.\n" +
+    "Panel support telah ditambahkan.\n" +
+    "Part kasat mata telah diperiksa.\n" +
+    "Material / finishing khusus telah divalidasi.\n\n" +
+    "Data siap dilanjutkan ke proses SPK."
+  );
 
 }
 
 </script>
+
+</main>
+</div>
 
 </body>
 </html>
