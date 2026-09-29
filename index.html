@@ -1,346 +1,494 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ClaimGuard - Prototype Validasi Klaim</title>
 
-  <title>Prototype Sistem Klaim Mobil</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6fa;color:#172033}
+header{
+height:64px;background:white;border-bottom:1px solid #ddd;
+display:flex;align-items:center;justify-content:space-between;padding:0 30px;
+position:sticky;top:0;z-index:10
+}
+.logo{font-size:20px;font-weight:bold;color:#1746a2}
+.badge{background:#fff0c2;color:#925c00;padding:8px 14px;border-radius:20px;font-size:12px;font-weight:bold}
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+.layout{display:flex}
+.sidebar{
+width:230px;background:#122451;min-height:calc(100vh - 64px);
+padding:24px 15px;color:white
+}
+.side-title{font-size:11px;color:#8fb5ff;margin:8px 12px 18px}
+.menu{padding:13px;border-radius:8px;margin-bottom:6px;color:#d9e5ff}
+.menu.active{background:#2764d8;color:white}
 
-    body {
-      background: #f4f6f9;
-      color: #1f2937;
-    }
+main{flex:1;padding:32px;max-width:1300px}
+h1{margin:0 0 7px;font-size:27px}
+.subtitle{color:#687386;margin-bottom:25px}
 
-    /* HEADER */
-    .header {
-      height: 64px;
-      background: #ffffff;
-      border-bottom: 1px solid #e5e7eb;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 30px;
-    }
+.steps{display:flex;gap:8px;margin-bottom:25px}
+.step{
+flex:1;background:white;border:1px solid #dfe3ea;
+border-radius:10px;padding:13px;font-size:12px
+}
+.step b{display:block;color:#2764d8;margin-bottom:5px}
+.step.active{border:2px solid #2764d8;background:#edf4ff}
 
-    .logo {
-      font-size: 20px;
-      font-weight: bold;
-      color: #1e40af;
-    }
+.card{
+background:white;border:1px solid #dfe3ea;border-radius:12px;
+padding:24px;margin-bottom:20px
+}
+.card h2{margin-top:0;font-size:19px}
 
-    .prototype {
-      background: #fef3c7;
-      color: #92400e;
-      padding: 7px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-    }
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+label{font-size:12px;font-weight:bold;display:block;margin-bottom:6px}
+input,select{
+width:100%;padding:11px;border:1px solid #ccd2dc;
+border-radius:7px;background:white
+}
 
-    /* SIDEBAR */
-    .sidebar {
-      position: fixed;
-      top: 64px;
-      left: 0;
-      bottom: 0;
-      width: 230px;
-      background: #172554;
-      padding: 25px 15px;
-    }
+button{
+border:0;border-radius:7px;padding:11px 18px;
+font-weight:bold;cursor:pointer
+}
+.primary{background:#2764d8;color:white}
+.secondary{background:#eef1f5;color:#28354a}
+.danger{background:#fff1f1;color:#b42318;border:1px solid #ffc9c9}
 
-    .sidebar-title {
-      color: #93c5fd;
-      font-size: 11px;
-      margin: 10px 12px;
-      text-transform: uppercase;
-    }
+.actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}
 
-    .menu {
-      padding: 13px;
-      margin-bottom: 6px;
-      color: #dbeafe;
-      border-radius: 8px;
-      cursor: pointer;
-    }
+.hidden{display:none}
 
-    .menu.active {
-      background: #2563eb;
-      color: white;
-    }
+.panel-grid{
+display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:15px
+}
+.panel{
+border:1px solid #d9dee7;border-radius:10px;padding:16px;
+cursor:pointer;background:#fff;transition:.2s
+}
+.panel:hover{border-color:#2764d8}
+.panel.selected{border:2px solid #dc2626;background:#fff3f3}
+.panel-title{font-weight:bold;margin-bottom:5px}
+.small{font-size:12px;color:#6b7280}
 
-    /* CONTENT */
-    .content {
-      margin-left: 230px;
-      padding: 35px;
-    }
+.alert{
+padding:15px;border-radius:8px;margin:15px 0;font-size:13px
+}
+.alert.blue{background:#eef5ff;border-left:4px solid #2764d8}
+.alert.yellow{background:#fff8df;border-left:4px solid #e5a000}
+.alert.red{background:#fff0f0;border-left:4px solid #dc2626}
+.alert.green{background:#ecfdf3;border-left:4px solid #16a34a}
 
-    h1 {
-      font-size: 26px;
-      margin-bottom: 8px;
-    }
+.part{
+display:flex;align-items:center;justify-content:space-between;
+border:1px solid #e0e4eb;padding:14px;border-radius:9px;margin:9px 0;
+gap:15px
+}
+.part-info{flex:1}
+.part-name{font-weight:bold}
+.tag{
+display:inline-block;font-size:10px;padding:4px 7px;border-radius:12px;
+background:#edf2ff;color:#244b9b;margin-top:5px
+}
+.part select{width:150px}
 
-    .subtitle {
-      color: #6b7280;
-      margin-bottom: 30px;
-    }
+.summary{
+display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:15px 0
+}
+.stat{padding:18px;border:1px solid #ddd;border-radius:10px;text-align:center}
+.stat strong{display:block;font-size:25px;margin-bottom:5px}
 
-    /* STEP */
-    .steps {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 30px;
-    }
-
-    .step {
-      flex: 1;
-      background: white;
-      padding: 15px;
-      border-radius: 10px;
-      border: 1px solid #e5e7eb;
-      font-size: 13px;
-    }
-
-    .step.active {
-      border: 2px solid #2563eb;
-      background: #eff6ff;
-    }
-
-    .step-number {
-      font-weight: bold;
-      color: #2563eb;
-      margin-bottom: 5px;
-    }
-
-    /* CARD */
-    .card {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      border: 1px solid #e5e7eb;
-      margin-bottom: 20px;
-    }
-
-    .card h2 {
-      font-size: 18px;
-      margin-bottom: 20px;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2,1fr);
-      gap: 20px;
-    }
-
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: bold;
-      margin-bottom: 7px;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #d1d5db;
-      border-radius: 7px;
-      background: white;
-    }
-
-    /* BUTTON */
-    .button-area {
-      margin-top: 25px;
-      display: flex;
-      justify-content: flex-end;
-    }
-
-    button {
-      background: #2563eb;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 7px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    button:hover {
-      background: #1d4ed8;
-    }
-
-    /* WARNING */
-    .info {
-      background: #eff6ff;
-      border-left: 4px solid #2563eb;
-      padding: 15px;
-      margin-top: 20px;
-      border-radius: 5px;
-      color: #1e3a8a;
-      font-size: 13px;
-    }
-
-    @media(max-width:800px) {
-      .sidebar {
-        display:none;
-      }
-
-      .content {
-        margin-left:0;
-        padding:20px;
-      }
-
-      .form-grid {
-        grid-template-columns:1fr;
-      }
-
-      .steps {
-        flex-direction:column;
-      }
-    }
-  </style>
+@media(max-width:850px){
+.sidebar{display:none}
+main{padding:20px}
+.steps{flex-direction:column}
+.grid,.panel-grid,.summary{grid-template-columns:1fr}
+.part{align-items:flex-start;flex-direction:column}
+.part select{width:100%}
+}
+</style>
 </head>
 
 <body>
 
-  <div class="header">
-    <div class="logo">
-      CLAIMGUARD
-    </div>
+<header>
+<div class="logo">CLAIMGUARD</div>
+<div class="badge">PROTOTYPE SYSTEM</div>
+</header>
 
-    <div class="prototype">
-      PROTOTYPE SYSTEM
-    </div>
-  </div>
+<div class="layout">
 
-  <div class="sidebar">
+<div class="sidebar">
+<div class="side-title">CLAIM MANAGEMENT</div>
+<div class="menu active">▣ Survey Klaim</div>
+<div class="menu">▤ Data Klaim</div>
+<div class="menu">✓ Validasi Sparepart</div>
+<div class="menu">◎ Hasil Survey</div>
+</div>
 
-    <div class="sidebar-title">
-      CLAIM MANAGEMENT
-    </div>
+<main>
 
-    <div class="menu active">
-      Dashboard
-    </div>
+<h1>Smart Claim Survey</h1>
+<div class="subtitle">
+Prototype validasi panel dan sparepart untuk mengurangi penambahan part setelah SPK.
+</div>
 
-    <div class="menu">
-      Data Klaim
-    </div>
+<div class="steps">
+<div class="step active" id="s1"><b>01</b>Data Klaim</div>
+<div class="step" id="s2"><b>02</b>Kerusakan</div>
+<div class="step" id="s3"><b>03</b>Validasi Panel</div>
+<div class="step" id="s4"><b>04</b>Sparepart</div>
+<div class="step" id="s5"><b>05</b>Review</div>
+</div>
 
-    <div class="menu">
-      Survey Kendaraan
-    </div>
+<!-- STEP 1 -->
+<section id="page1" class="card">
+<h2>Data Klaim & Kendaraan</h2>
 
-    <div class="menu">
-      Validasi Sparepart
-    </div>
+<div class="grid">
+<div>
+<label>Nomor Klaim</label>
+<input value="CLM-TEST-001">
+</div>
 
-    <div class="menu">
-      Hasil Survey
-    </div>
+<div>
+<label>Nomor Polisi</label>
+<input value="B 1234 TEST">
+</div>
 
-  </div>
+<div>
+<label>Nomor Rangka</label>
+<input value="MHXXXXXXXXXXXX001">
+</div>
 
-  <div class="content">
+<div>
+<label>Kendaraan</label>
+<select>
+<option>Toyota Avanza 2024</option>
+<option>Honda Brio 2024</option>
+<option>Mitsubishi Xpander 2024</option>
+</select>
+</div>
+</div>
 
-    <h1>Validasi Sparepart Klaim Mobil</h1>
+<div class="alert blue">
+ℹ️ Data yang digunakan pada prototype merupakan data dummy dan tidak terhubung dengan database perusahaan.
+</div>
 
-    <div class="subtitle">
-      Sistem pendukung survey untuk mengurangi potensi penambahan sparepart setelah SPK.
-    </div>
+<div class="actions">
+<button class="primary" onclick="go(2)">Mulai Survey →</button>
+</div>
+</section>
 
-    <div class="steps">
+<!-- STEP 2 -->
+<section id="page2" class="card hidden">
 
-      <div class="step active">
-        <div class="step-number">01</div>
-        Data Klaim
-      </div>
+<h2>Input Kerusakan Kendaraan</h2>
 
-      <div class="step">
-        <div class="step-number">02</div>
-        Input Kerusakan
-      </div>
+<p class="small">
+Pilih panel yang mengalami kerusakan berdasarkan hasil survey kendaraan.
+</p>
 
-      <div class="step">
-        <div class="step-number">03</div>
-        Validasi Panel
-      </div>
+<div class="panel-grid">
 
-      <div class="step">
-        <div class="step-number">04</div>
-        Validasi Sparepart
-      </div>
+<div class="panel" onclick="selectPanel(this,'Bumper Depan')">
+<div class="panel-title">🚘 Bumper Depan</div>
+<div class="small">Front bumper assembly</div>
+</div>
 
-      <div class="step">
-        <div class="step-number">05</div>
-        Review Survey
-      </div>
+<div class="panel" onclick="selectPanel(this,'Fender Depan')">
+<div class="panel-title">🚗 Fender Depan</div>
+<div class="small">Front fender</div>
+</div>
 
-    </div>
+<div class="panel" onclick="selectPanel(this,'Pintu')">
+<div class="panel-title">🚙 Pintu</div>
+<div class="small">Door assembly</div>
+</div>
 
-    <div class="card">
+<div class="panel" onclick="selectPanel(this,'Bumper Belakang')">
+<div class="panel-title">🚘 Bumper Belakang</div>
+<div class="small">Rear bumper assembly</div>
+</div>
 
-      <h2>Data Klaim & Kendaraan</h2>
+<div class="panel" onclick="selectPanel(this,'Bagasi')">
+<div class="panel-title">🚗 Bagasi</div>
+<div class="small">Back door / trunk</div>
+</div>
 
-      <div class="form-grid">
+<div class="panel" onclick="selectPanel(this,'Spion')">
+<div class="panel-title">🚙 Spion</div>
+<div class="small">Mirror assembly</div>
+</div>
 
-        <div>
-          <label>Nomor Klaim</label>
-          <input type="text" value="CLM-TEST-001">
-        </div>
+</div>
 
-        <div>
-          <label>Nomor Polisi</label>
-          <input type="text" value="B 1234 TEST">
-        </div>
+<div id="selectedInfo" class="alert yellow hidden"></div>
 
-        <div>
-          <label>Nomor Rangka</label>
-          <input type="text" value="MHXXXXXXXXXXXX001">
-        </div>
+<div class="actions">
+<button class="secondary" onclick="go(1)">← Kembali</button>
+<button class="primary" onclick="panelValidation()">Validasi Panel →</button>
+</div>
 
-        <div>
-          <label>Jenis Kendaraan</label>
+</section>
 
-          <select>
-            <option>Toyota Avanza</option>
-            <option>Honda Brio</option>
-            <option>Mitsubishi Xpander</option>
-            <option>Hyundai Creta</option>
-          </select>
+<!-- STEP 3 -->
+<section id="page3" class="card hidden">
 
-        </div>
+<h2>Validasi Panel Utama</h2>
 
-      </div>
+<div class="alert blue">
+🔎 Sistem melakukan pengecekan panel berdasarkan kendaraan dan nomor rangka.
+</div>
 
-      <div class="info">
-        Prototype menggunakan data dummy. Data ini tidak terhubung dengan database klaim perusahaan.
-      </div>
+<div id="panelResult"></div>
 
-      <div class="button-area">
-        <button onclick="lanjut()">
-          Lanjut Input Kerusakan →
-        </button>
-      </div>
+<div class="alert yellow">
+<strong>Smart Validation</strong><br><br>
+Sistem akan menampilkan komponen pendukung yang berpotensi ikut mengalami kerusakan agar tidak terlewat pada survey awal.
+</div>
 
-    </div>
+<div class="actions">
+<button class="secondary" onclick="go(2)">← Kembali</button>
+<button class="primary" onclick="loadParts()">Periksa Part Terkait →</button>
+</div>
 
-  </div>
+</section>
 
-  <script>
-    function lanjut() {
-      alert(
-        "Tahap berikutnya: Input Kerusakan Kendaraan\n\n" +
-        "Pada versi selanjutnya sistem akan menampilkan panel kendaraan dan melakukan validasi sparepart terkait."
-      );
-    }
-  </script>
+<!-- STEP 4 -->
+<section id="page4" class="card hidden">
+
+<h2>Validasi Sparepart Terkait</h2>
+
+<div class="alert red">
+⚠️ <strong>Potensi part terlewat terdeteksi.</strong><br>
+Periksa seluruh komponen terkait sebelum survey dapat diselesaikan.
+</div>
+
+<div id="parts"></div>
+
+<div id="partWarning" class="alert yellow">
+Semua part terkait wajib diberikan status.
+</div>
+
+<div class="actions">
+<button class="secondary" onclick="go(3)">← Kembali</button>
+<button class="primary" onclick="validateParts()">Validasi Survey →</button>
+</div>
+
+</section>
+
+<!-- STEP 5 -->
+<section id="page5" class="card hidden">
+
+<h2>Review Hasil Survey</h2>
+
+<div class="summary">
+
+<div class="stat">
+<strong id="totalPanel">1</strong>
+Panel Rusak
+</div>
+
+<div class="stat">
+<strong id="totalPart">0</strong>
+Part Diperiksa
+</div>
+
+<div class="stat">
+<strong id="missingPart">0</strong>
+Part Terlewat
+</div>
+
+</div>
+
+<div class="alert green">
+✅ <strong>VALIDASI SELESAI</strong><br><br>
+Seluruh komponen terkait telah diperiksa. Tidak ditemukan part yang belum divalidasi.
+</div>
+
+<div id="review"></div>
+
+<div class="actions">
+<button class="secondary" onclick="go(4)">← Kembali</button>
+<button class="primary" onclick="finishSurvey()">✓ Finalisasi Survey</button>
+</div>
+
+</section>
+
+</main>
+</div>
+
+<script>
+
+let selectedPanel="";
+let selectedElement=null;
+
+function go(n){
+
+document.querySelectorAll("section").forEach(x=>x.classList.add("hidden"));
+document.getElementById("page"+n).classList.remove("hidden");
+
+document.querySelectorAll(".step").forEach(x=>x.classList.remove("active"));
+document.getElementById("s"+n).classList.add("active");
+
+window.scrollTo(0,0);
+}
+
+function selectPanel(el,name){
+
+document.querySelectorAll(".panel").forEach(x=>x.classList.remove("selected"));
+
+el.classList.add("selected");
+selectedPanel=name;
+selectedElement=el;
+
+let info=document.getElementById("selectedInfo");
+info.classList.remove("hidden");
+
+info.innerHTML=
+"🔴 <strong>Panel dipilih:</strong> "+name+
+"<br><br>Sistem akan memeriksa part pendukung yang berkaitan dengan panel ini.";
+}
+
+function panelValidation(){
+
+if(selectedPanel===""){
+alert("Pilih panel yang mengalami kerusakan terlebih dahulu.");
+return;
+}
+
+document.getElementById("panelResult").innerHTML=
+'<div class="part">'+
+'<div class="part-info">'+
+'<div class="part-name">'+selectedPanel+'</div>'+
+'<span class="tag">PANEL UTAMA</span>'+
+'</div>'+
+'<strong style="color:#16a34a">✓ Sesuai Kendaraan</strong>'+
+'</div>';
+
+go(3);
+}
+
+const partDatabase={
+
+"Bumper Belakang":[
+["Moulding Bumper Belakang","Finishing / kulit jeruk"],
+["Reflector Bumper","Part pendukung"],
+["Retainer Bumper","Part pendukung"],
+["Spoiler / Under Garnish","Periksa material / finishing"]
+],
+
+"Bumper Depan":[
+["Grille Depan","Part terkait"],
+["Moulding Bumper","Chrome / finishing"],
+["Bracket Bumper","Part pendukung"],
+["Foglamp Garnish","Part terkait"]
+],
+
+"Fender Depan":[
+["Inner Fender","Part pendukung"],
+["Fender Liner","Part pendukung"],
+["Moulding Fender","Periksa finishing"]
+],
+
+"Pintu":[
+["Moulding Pintu","Periksa finishing"],
+["Handle Pintu","Chrome / painted"],
+["List Pintu","Part pendukung"]
+],
+
+"Bagasi":[
+["Garnish Bagasi","Chrome / finishing"],
+["Emblem","Part pendukung"],
+["Weatherstrip","Part pendukung"]
+],
+
+"Spion":[
+["Cover Spion","Painted"],
+["Lampu Sein Spion","Part terkait"],
+["Mirror Glass","Part terkait"]
+]
+
+};
+
+function loadParts(){
+
+let list=partDatabase[selectedPanel] || [];
+let html="";
+
+list.forEach((p,i)=>{
+
+html+=`
+<div class="part">
+<div class="part-info">
+<div class="part-name">${p[0]}</div>
+<span class="tag">${p[1]}</span>
+</div>
+
+<select class="partStatus" data-name="${p[0]}">
+<option value="">-- Pilih Status --</option>
+<option value="Tidak Rusak">Tidak Rusak</option>
+<option value="Repair">Repair</option>
+<option value="Ganti">Ganti</option>
+</select>
+</div>
+`;
+
+});
+
+document.getElementById("parts").innerHTML=html;
+go(4);
+}
+
+function validateParts(){
+
+let selects=document.querySelectorAll(".partStatus");
+let incomplete=false;
+
+selects.forEach(s=>{
+if(s.value==="") incomplete=true;
+});
+
+if(incomplete){
+
+document.getElementById("partWarning").className="alert red";
+document.getElementById("partWarning").innerHTML=
+"⚠️ <strong>Survey belum dapat dilanjutkan.</strong><br>Ada part terkait yang belum diperiksa.";
+
+return;
+}
+
+document.getElementById("totalPart").innerText=selects.length;
+document.getElementById("missingPart").innerText="0";
+
+let review="<div class='card'><strong>Panel Utama:</strong> "+selectedPanel+"<br><br>";
+
+selects.forEach(s=>{
+review+="<strong>"+s.dataset.name+"</strong> — "+s.value+"<br><br>";
+});
+
+review+="</div>";
+
+document.getElementById("review").innerHTML=review;
+
+go(5);
+}
+
+function finishSurvey(){
+
+alert(
+"VALIDASI SURVEY BERHASIL\n\n"+
+"Seluruh panel dan sparepart terkait telah diperiksa.\n\n"+
+"Prototype: Data siap dilanjutkan ke proses SPK."
+);
+
+}
+
+</script>
 
 </body>
 </html>
