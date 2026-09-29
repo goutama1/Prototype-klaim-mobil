@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ClaimGuard - Smart Claim Validation V4</title>
+<title>ClaimGuard - Smart Claim Validation V5</title>
 
 <style>
 *{box-sizing:border-box}
@@ -1146,7 +1146,90 @@ function updateCounters(){
 /* =========================
    FINAL VALIDATION
 ========================= */
+/* =========================================
+   DOUBLE CHECK MATERIAL KHUSUS - V5
+========================================= */
 
+function handleRepairConfirmation(){
+
+    const selected = document.querySelector(
+        'input[name="repairConfirmation"]:checked'
+    );
+
+    const reasonBox = document.getElementById("repairReasonBox");
+
+    if(!selected || !reasonBox) return;
+
+    if(selected.value === "repair"){
+        reasonBox.style.display = "block";
+    }else{
+        reasonBox.style.display = "none";
+
+        const reason = document.getElementById("repairReason");
+        if(reason) reason.value = "";
+    }
+}
+
+
+function confirmSpecialRepair(){
+
+    const selected = document.querySelector(
+        'input[name="repairConfirmation"]:checked'
+    );
+
+    if(!selected){
+        alert(
+            "Pilih keputusan setelah double checking:\n\n" +
+            "• Ubah menjadi Ganti\n" +
+            "• Tetap Repair"
+        );
+        return;
+    }
+
+
+    /* ================================
+       PILIHAN: UBAH MENJADI GANTI
+    ================================= */
+
+    if(selected.value === "ganti"){
+
+        alert(
+            "Silakan ubah Hasil Pemeriksaan part terkait dari Repair menjadi Ganti.\n\n" +
+            "Sistem tidak mengubah keputusan secara otomatis karena keputusan tetap berada pada surveyor."
+        );
+
+        return;
+    }
+
+
+    /* ================================
+       PILIHAN: TETAP REPAIR
+    ================================= */
+
+    if(selected.value === "repair"){
+
+        const reason =
+            document.getElementById("repairReason").value.trim();
+
+        if(reason === ""){
+            alert(
+                "Alasan Tetap Repair wajib diisi sebelum double checking dikonfirmasi."
+            );
+            return;
+        }
+
+        window.specialRepairOverride = {
+            confirmed: true,
+            reason: reason
+        };
+
+        alert(
+            "Double checking berhasil dikonfirmasi.\n\n" +
+            "Keputusan Tetap Repair telah dicatat beserta alasannya.\n\n" +
+            "Tekan Final Validation kembali untuk melanjutkan."
+        );
+    }
+}
 function finalValidation(){
 
   const parts =
@@ -1210,24 +1293,56 @@ function finalValidation(){
   }
 
 
-  /* MATERIAL KHUSUS + REPAIR */
+/* MATERIAL KHUSUS + REPAIR - DOUBLE CHECK V5 */
 
-  if(specialRepair.length>0){
+if(
+    specialRepair.length > 0 &&
+    !(window.specialRepairOverride &&
+      window.specialRepairOverride.confirmed === true)
+){
 
     message.className="alert red";
 
     message.innerHTML =
-      "<strong>⚠ MATERIAL / FINISHING WARNING</strong><br><br>"+
-      "Part berikut memiliki karakteristik khusus namun dipilih <strong>Repair</strong>:<br><br>• "+
-      specialRepair.join("<br>• ")+
-      "<br><br>"+
-      "<strong>DOUBLE CHECK SURVEYOR REQUIRED.</strong><br>"+
-      "Pastikan karakteristik part dan metode repair sudah sesuai. "+
-      "Jika part tidak dapat direpair, ubah keputusan menjadi <strong>Ganti</strong>.";
+        "<strong>⚠ MATERIAL / FINISHING WARNING</strong><br><br>"+
+        "Part berikut memiliki karakteristik khusus namun dipilih <strong>Repair</strong>:<br><br>"+
+        specialRepair.join("<br>• ")+
+        "<br><br>"+
+        "<strong>DOUBLE CHECK SURVEYOR REQUIRED.</strong><br>"+
+        "Pastikan karakteristik part dan metode repair sudah sesuai sebelum proses dilanjutkan."+
+        "<div style='margin-top:18px;padding:16px;border:1px solid #f0b4b4;border-radius:8px;background:#fff;'>"+
+        
+        "<strong>Keputusan Setelah Double Check</strong><br><br>"+
+        
+        "<label style='display:block;margin-bottom:10px;'>"+
+        "<input type='radio' name='repairConfirmation' value='ganti' onchange='handleRepairConfirmation()'> "+
+        "<strong>Ubah menjadi Ganti</strong>"+
+        "</label>"+
+        
+        "<label style='display:block;margin-bottom:12px;'>"+
+        "<input type='radio' name='repairConfirmation' value='repair' onchange='handleRepairConfirmation()'> "+
+        "<strong>Tetap Repair</strong>"+
+        "</label>"+
+        
+        "<div id='repairReasonBox' style='display:none;margin-top:14px;'>"+
+        "<label><strong>Alasan Tetap Repair</strong></label>"+
+        "<textarea id='repairReason' rows='3' "+
+        "placeholder='Contoh: Metode repair telah dikonfirmasi dapat dilakukan oleh bengkel.' "+
+        "style='width:100%;margin-top:8px;padding:10px;border:1px solid #ccc;border-radius:6px;'></textarea>"+
+        "<div style='font-size:12px;color:#687386;margin-top:6px;'>"+
+        "Alasan wajib diisi sebagai bukti double checking surveyor."+
+        "</div>"+
+        "</div>"+
+        
+        "<button type='button' onclick='confirmSpecialRepair()' "+
+        "style='margin-top:16px;padding:10px 16px;background:#2764d8;color:white;border:0;border-radius:6px;font-weight:700;'>"+
+        "Konfirmasi Double Check"+
+        "</button>"+
+        
+        "</div>";
 
     return;
-  }
-
+}
 
   /* VALID */
 
