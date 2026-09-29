@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Prototype Sistem Klaim Mobil</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f6f9;
+      color: #1f2937;
+    }
+
+    /* HEADER */
+    .header {
+      height: 64px;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+      color: #1e40af;
+    }
+
+    .prototype {
+      background: #fef3c7;
+      color: #92400e;
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed;
+      top: 64px;
+      left: 0;
+      bottom: 0;
+      width: 230px;
+      background: #172554;
+      padding: 25px 15px;
+    }
+
+    .sidebar-title {
+      color: #93c5fd;
+      font-size: 11px;
+      margin: 10px 12px;
+      text-transform: uppercase;
+    }
+
+    .menu {
+      padding: 13px;
+      margin-bottom: 6px;
+      color: #dbeafe;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .menu.active {
+      background: #2563eb;
+      color: white;
+    }
+
+    /* CONTENT */
+    .content {
+      margin-left: 230px;
+      padding: 35px;
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #6b7280;
+      margin-bottom: 30px;
+    }
+
+    /* STEP */
+    .steps {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .step {
+      flex: 1;
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      font-size: 13px;
+    }
+
+    .step.active {
+      border: 2px solid #2563eb;
+      background: #eff6ff;
+    }
+
+    .step-number {
+      font-weight: bold;
+      color: #2563eb;
+      margin-bottom: 5px;
+    }
+
+    /* CARD */
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 7px;
+      background: white;
+    }
+
+    /* BUTTON */
+    .button-area {
+      margin-top: 25px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    /* WARNING */
+    .info {
+      background: #eff6ff;
+      border-left: 4px solid #2563eb;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 5px;
+      color: #1e3a8a;
+      font-size: 13px;
+    }
+
+    @media(max-width:800px) {
+      .sidebar {
+        display:none;
+      }
+
+      .content {
+        margin-left:0;
+        padding:20px;
+      }
+
+      .form-grid {
+        grid-template-columns:1fr;
+      }
+
+      .steps {
+        flex-direction:column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="logo">
+      CLAIMGUARD
+    </div>
+
+    <div class="prototype">
+      PROTOTYPE SYSTEM
+    </div>
+  </div>
+
+  <div class="sidebar">
+
+    <div class="sidebar-title">
+      CLAIM MANAGEMENT
+    </div>
+
+    <div class="menu active">
+      Dashboard
+    </div>
+
+    <div class="menu">
+      Data Klaim
+    </div>
+
+    <div class="menu">
+      Survey Kendaraan
+    </div>
+
+    <div class="menu">
+      Validasi Sparepart
+    </div>
+
+    <div class="menu">
+      Hasil Survey
+    </div>
+
+  </div>
+
+  <div class="content">
+
+    <h1>Validasi Sparepart Klaim Mobil</h1>
+
+    <div class="subtitle">
+      Sistem pendukung survey untuk mengurangi potensi penambahan sparepart setelah SPK.
+    </div>
+
+    <div class="steps">
+
+      <div class="step active">
+        <div class="step-number">01</div>
+        Data Klaim
+      </div>
+
+      <div class="step">
+        <div class="step-number">02</div>
+        Input Kerusakan
+      </div>
+
+      <div class="step">
+        <div class="step-number">03</div>
+        Validasi Panel
+      </div>
+
+      <div class="step">
+        <div class="step-number">04</div>
+        Validasi Sparepart
+      </div>
+
+      <div class="step">
+        <div class="step-number">05</div>
+        Review Survey
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <h2>Data Klaim & Kendaraan</h2>
+
+      <div class="form-grid">
+
+        <div>
+          <label>Nomor Klaim</label>
+          <input type="text" value="CLM-TEST-001">
+        </div>
+
+        <div>
+          <label>Nomor Polisi</label>
+          <input type="text" value="B 1234 TEST">
+        </div>
+
+        <div>
+          <label>Nomor Rangka</label>
+          <input type="text" value="MHXXXXXXXXXXXX001">
+        </div>
+
+        <div>
+          <label>Jenis Kendaraan</label>
+
+          <select>
+            <option>Toyota Avanza</option>
+            <option>Honda Brio</option>
+            <option>Mitsubishi Xpander</option>
+            <option>Hyundai Creta</option>
+          </select>
+
+        </div>
+
+      </div>
+
+      <div class="info">
+        Prototype menggunakan data dummy. Data ini tidak terhubung dengan database klaim perusahaan.
+      </div>
+
+      <div class="button-area">
+        <button onclick="lanjut()">
+          Lanjut Input Kerusakan →
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function lanjut() {
+      alert(
+        "Tahap berikutnya: Input Kerusakan Kendaraan\n\n" +
+        "Pada versi selanjutnya sistem akan menampilkan panel kendaraan dan melakukan validasi sparepart terkait."
+      );
+    }
+  </script>
+
+</body>
+</html>
